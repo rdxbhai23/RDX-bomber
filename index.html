@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RDX App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        #accessScreen, #adminPanel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: white;
+        }
+        .hidden { display: none; }
+        .menu {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        #logo {
+            width: 150px;
+            height: 150px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            cursor: pointer;
+        }
+        input { padding: 5px; }
+    </style>
+</head>
+<body>
+
+    <!-- Access Code Screen -->
+    <div id="accessScreen">
+        <h2>Enter Access Code</h2>
+        <input type="password" id="accessInput" placeholder="Enter access code">
+        <button onclick="checkAccess()">Enter</button>
+    </div>
+
+    <!-- Main App -->
+    <div class="menu" onclick="toggleMenu()">☰</div>
+    
+    <div id="menuOptions" class="hidden">
+        <button onclick="adminLogin()">Admin Login</button>
+    </div>
+
+    <div class="container">
+        <h1 id="appName">RDX</h1>
+        <img id="logo" src="default_logo.png" alt="App Logo">
+        <h3>Welcome to RDX App</h3>
+        <input type="file" id="fileUpload" class="hidden" onchange="changeHomeImage()">
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="adminPanel" class="hidden">
+        <h2>Admin Panel</h2>
+        <label>Change App Name:</label>
+        <input type="text" id="newAppName" placeholder="Enter new name">
+        <button onclick="updateAppName()">Save</button><br>
+
+        <label>Change Logo:</label>
+        <input type="file" id="logoUpload" onchange="changeLogo()"><br>
+
+        <label>Upload Home Image:</label>
+        <input type="file" id="homeImageUpload" onchange="changeHomeImage()"><br>
+
+        <button onclick="logoutAdmin()">Logout</button>
+    </div>
+
+    <script>
+        function checkAccess() {
+            let accessCode = document.getElementById("accessInput").value;
+            if (accessCode === "rdx101") {
+                document.getElementById("accessScreen").style.display = "none";
+            } else {
+                alert("Wrong Access Code!");
+            }
+        }
+
+        function toggleMenu() {
+            let menu = document.getElementById("menuOptions");
+            menu.classList.toggle("hidden");
+        }
+
+        function adminLogin() {
+            let password = prompt("Enter Admin Password:");
+            if (password === "RDXFF101") {
+                document.getElementById("adminPanel").classList.remove("hidden");
+            } else {
+                alert("Incorrect Password!");
+            }
+        }
+
+        function updateAppName() {
+            let newName = document.getElementById("newAppName").value;
+            if (newName.trim() !== "") {
+                document.getElementById("appName").innerText = newName;
+                alert("App Name Updated!");
+            }
+        }
+
+        function changeLogo() {
+            let file = document.getElementById("logoUpload").files[0];
+            if (file) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById("logo").src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function changeHomeImage() {
+            let file = document.getElementById("homeImageUpload").files[0];
+            if (file) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    document.body.style.backgroundImage = `url('${e.target.result}')`;
+                    document.body.style.backgroundSize = "cover";
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function logoutAdmin() {
+            document.getElementById("adminPanel").classList.add("hidden");
+        }
+    </script>
+
+</body>
+</html>
