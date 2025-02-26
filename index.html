@@ -32,6 +32,7 @@
             right: 10px;
             font-size: 24px;
             cursor: pointer;
+            display: none; /* Pehle hidden rahega */
         }
         .container {
             margin-top: 50px;
@@ -58,7 +59,7 @@
     </div>
 
     <!-- Main App -->
-    <div class="menu" onclick="toggleMenu()">☰</div>
+    <div class="menu" id="menuButton" onclick="toggleMenu()">☰</div>
     
     <div id="menuOptions" class="hidden">
         <button onclick="adminLogin()">Admin Login</button>
@@ -88,10 +89,13 @@
     </div>
 
     <script>
+        let isAdmin = false; // Admin Login ka track rakhne ke liye
+
         function checkAccess() {
             let accessCode = document.getElementById("accessInput").value;
             if (accessCode === "rdx101") {
                 document.getElementById("accessScreen").style.display = "none";
+                document.getElementById("menuButton").style.display = "block"; // Access ke baad menu dikhao
             } else {
                 alert("Wrong Access Code!");
             }
@@ -104,7 +108,8 @@
 
         function adminLogin() {
             let password = prompt("Enter Admin Password:");
-            if (password === "RDXFF101") {
+            if (password === "rdxff101") {
+                isAdmin = true;
                 document.getElementById("adminPanel").classList.remove("hidden");
             } else {
                 alert("Incorrect Password!");
@@ -143,6 +148,7 @@
         }
 
         function logoutAdmin() {
+            isAdmin = false;
             document.getElementById("adminPanel").classList.add("hidden");
         }
     </script>
